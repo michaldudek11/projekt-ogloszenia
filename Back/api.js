@@ -7,6 +7,11 @@ app.post('/register', (req, res) => {
   const registerPassword = req.body.password;
 })
 
+app.post('/login', (req, res) => {
+  const loginEmail = req.body.email;
+  const loginPassword = req.body.password;
+})
+
 app.listen(port, () => {
   console.log('Serwer na porcie' + port);
 });
