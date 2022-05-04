@@ -1,6 +1,17 @@
-const express = require('express')
+// Zmienne env
+require('dotenv').config()
+const DB_URL = process.env.DB_URL;
+
+// Mongodb 
+const mongoose = require('mongoose')
+const Advert = require('./Models/Advert')
+mongoose.connect(DB_URL).catch((err) => console.error(err))
+
+// Express 
+const express = require('express');
 const app = express()
 const port = 3000
+
 
 app.post('/register', (req, res) => {
   const registerEmail = req.body.email;
@@ -13,5 +24,5 @@ app.post('/login', (req, res) => {
 })
 
 app.listen(port, () => {
-  console.log('Serwer na porcie' + port);
+  console.log('Serwer na porcie ' + port);
 });
