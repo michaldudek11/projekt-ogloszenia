@@ -10,12 +10,13 @@ mongoose.connect(DB_URL).catch((err) => console.error(err))
 
 // Express 
 const express = require('express');
-const { request } = require('express');
+const bodyParser = require('body-parser');
+const jsonParser = bodyParser.json();
 const app = express()
 const port = 3000
 
 
-app.post('/register', (req, res) => {
+app.post('/register', jsonParser, (req, res) => {
   const registerEmail = req.body.email;
   const registerPassword = req.body.password;
 
@@ -25,11 +26,12 @@ app.post('/register', (req, res) => {
   })
 
   User.findOne({ email: registerEmail }, (err, user) => {
-    if (user) return res.status(404).send('Użytkownik z takim mailem już istnieje')
+    if (user) return res.json({status: "error", message: "Taki użytkownik już istnieje"})
+
+    userToRegister.save((err) => console.log(err))
+    res.status(200).json({status: "ok"})
   })
 
-  userToRegister.save((err) => console.log(err))
-  res.status(200).send('Użytkownik zarejestrowany')
 })
 
 app.post('/login', (req, res) => {
