@@ -28,15 +28,25 @@ app.post('/register', jsonParser, (req, res) => {
   User.findOne({ email: registerEmail }, (err, user) => {
     if (user) return res.json({status: "error", message: "Taki użytkownik już istnieje"})
 
-    userToRegister.save((err) => console.log(err))
+    userToRegister.save((err) => err && console.log(err))
     res.status(200).json({status: "ok"})
   })
 
 })
 
-app.post('/login', (req, res) => {
+app.post('/login', jsonParser, (req, res) => {
   const loginEmail = req.body.email;
   const loginPassword = req.body.password;
+
+  User.findOne({email: loginEmail}, (err, user) => {
+    if (err) return res.status(404).json({status: "error", message: "Błąd podczas logowania"})
+
+    if (!user) return res.status(404).json({status: "error", message: "Nie ma użytkownika z takim mailem"})
+
+    if (user.password !== loginPassword) return res.status(404).json({status: "error", message: "Nieprawidłowe hasło"})
+
+    res.status(200).json({status: "ok"})
+  })
 })
 
 app.listen(port, () => {
