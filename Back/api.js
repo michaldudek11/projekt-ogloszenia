@@ -12,9 +12,10 @@ mongoose.connect(DB_URL).catch((err) => console.error(err))
 const express = require('express');
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
+const cors = require('cors')
 const app = express()
 const port = 3000
-
+app.use(cors())
 
 app.post('/register', jsonParser, (req, res) => {
   const registerEmail = req.body.email;
@@ -25,8 +26,12 @@ app.post('/register', jsonParser, (req, res) => {
     password: registerPassword
   })
 
+  if (!registerEmail || !registerPassword) {
+    return res.status(400).json({"error": "Brakuje maila lub hasła"})
+  }
+
   User.findOne({ email: registerEmail }, (err, user) => {
-    if (user) return res.json({status: "error", message: "Taki użytkownik już istnieje"})
+    if (user) return res.status(400).json({status: "error", message: "Taki użytkownik już istnieje"})
 
     userToRegister.save((err) => err && console.log(err))
     res.status(200).json({status: "ok"})
