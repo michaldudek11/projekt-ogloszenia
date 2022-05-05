@@ -12,9 +12,10 @@ mongoose.connect(DB_URL).catch((err) => console.error(err))
 const express = require('express');
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
+const cors = require('cors')
 const app = express()
 const port = 3000
-
+app.use(cors())
 
 app.post('/register', jsonParser, (req, res) => {
   const registerEmail = req.body.email;
@@ -25,18 +26,32 @@ app.post('/register', jsonParser, (req, res) => {
     password: registerPassword
   })
 
-  User.findOne({ email: registerEmail }, (err, user) => {
-    if (user) return res.json({status: "error", message: "Taki użytkownik już istnieje"})
+  if (!registerEmail || !registerPassword) {
+    return res.status(400).json({"error": "Brakuje maila lub hasła"})
+  }
 
-    userToRegister.save((err) => console.log(err))
+  User.findOne({ email: registerEmail }, (err, user) => {
+    if (user) return res.status(400).json({status: "error", message: "Taki użytkownik już istnieje"})
+
+    userToRegister.save((err) => err && console.log(err))
     res.status(200).json({status: "ok"})
   })
 
 })
 
-app.post('/login', (req, res) => {
+app.post('/login', jsonParser, (req, res) => {
   const loginEmail = req.body.email;
   const loginPassword = req.body.password;
+
+  User.findOne({email: loginEmail}, (err, user) => {
+    if (err) return res.status(404).json({status: "error", message: "Błąd podczas logowania"})
+
+    if (!user) return res.status(404).json({status: "error", message: "Nie ma użytkownika z takim mailem"})
+
+    if (user.password !== loginPassword) return res.status(404).json({status: "error", message: "Nieprawidłowe hasło"})
+
+    res.status(200).json({status: "ok"})
+  })
 })
 
 app.listen(port, () => {
