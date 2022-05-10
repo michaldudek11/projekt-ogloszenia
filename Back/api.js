@@ -66,27 +66,30 @@ app.post("/login", jsonParser, (req, res) => {
   });
 });
 
-app.delete(
-  "/postDelete",
-  jsonParser,
-  (req,
-  (res) => {
-    const postID = req.body.postID || null;
+app.delete("/postDelete", jsonParser, (req, res) => {
+  const postID = req.body.postID || null;
 
-    if (!postID) return res.status(400).json({ status: "Nie podano ID" });
+  if (!postID) return res.status(400).json({ status: "Nie podano ID" });
 
-    Advert.findOne({ _id: postID }, (advert, err) => {
-      if (!advert)
-        return res
-          .status(404)
-          .json({ status: "Nie znaleziono takiego ogłoszenia" });
+  Advert.findOne({ _id: postID }, (advert, err) => {
+    if (!advert) {
+      return res
+        .status(404)
+        .json({ status: "Nie znaleziono takiego ogłoszenia" });
+    }
 
-      Advert.deleteOne({ _id: postID });
+    Advert.deleteOne({ _id: postID });
 
-      res.status(200).json({ status: "ok" });
-    });
-  })
-);
+    res.status(200).json({ status: "ok" });
+  });
+});
+
+app.get("/getAllPosts", async (req, res) => {
+  const adverts = await Advert.find({}).limit(20);
+
+  res.status(200).send(adverts);
+});
+
 app.listen(port, () => {
   console.log("Serwer na porcie " + port);
 });
