@@ -90,6 +90,22 @@ app.get("/getAllPosts", async (req, res) => {
   res.status(200).send(adverts);
 });
 
+app.post("/addPost", jsonParser, async (req, res) => {
+  const { title, description, image, price, category } = req.body;
+
+  const postToAdd = new Advert({
+    title,
+    description,
+    image,
+    price,
+    category,
+  });
+
+  postToAdd.save();
+
+  res.status(200);
+});
+
 app.listen(port, () => {
   console.log("Serwer na porcie " + port);
 });
