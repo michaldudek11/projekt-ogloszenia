@@ -82,6 +82,8 @@ app.get('/getAllPosts', async (req, res) => {
 });
 
 app.post('/addPost', jsonParser, async (req, res) => {
+  if (!req.body) return res.status(400).json({ status: 'Nie podano parametrów' });
+
   const { title, description, image, price, category } = req.body;
 
   const postToAdd = new Advert({
@@ -92,11 +94,35 @@ app.post('/addPost', jsonParser, async (req, res) => {
     category,
   });
 
-  postToAdd.save();
+  postToAdd.save((err) => {
+    if (err) {
+      console.log(`Błąd w dodawaniu: ${JSON.stringify(err)}`);
+      return res.status(500).json({ status: 'Błąd przy dodawaniu posta' });
+    }
 
-  res.status(200);
+    return res.status(200).json({ status: 'ok' });
+  });
 });
 
+app.put('/editPost', jsonParser, (req, res) => {
+  const postID = req.body._id;
+  if (!postID) return res.status(400).json({ status: 'Nie podano ID posta' });
+
+  const filteredProps = Object.entries(req.body).filter((entry) => {
+    return entry[0] !== '_id'; // Nie aktualizujemy id
+  });
+
+  const propsToUpdate = Object.fromEntries(filteredProps);
+  Advert.updateOne({ _id: postID }, propsToUpdate, (err, updatedAdvert) => {
+    if (err) {
+      console.log(`Błąd w aktualizowaniu: ${JSON.stringify(err)}`);
+      return res.status(500).json({ status: 'Błąd przy aktualizacji' });
+    }
+    if (!updatedAdvert) return res.status(404).json({ status: 'Nie zaktualizowano' });
+
+    res.status(200).json({ status: 'ok' });
+  });
+});
 app.listen(port, () => {
   console.log('Serwer na porcie ' + port);
 });

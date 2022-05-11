@@ -1,0 +1,10 @@
+.grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
+    background: #F5F5F5;
+}
+
+.kartaOgloszenie {
+    /*  */
+}
