@@ -113,7 +113,7 @@ app.put('/editPost', jsonParser, (req, res) => {
   });
 
   const propsToUpdate = Object.fromEntries(filteredProps);
-  Advert.updateOne({ _id: postID }, propsToUpdate, (updatedAdvert, err) => {
+  Advert.updateOne({ _id: postID }, propsToUpdate, (err, updatedAdvert) => {
     if (err) {
       console.log(`Błąd w aktualizowaniu: ${JSON.stringify(err)}`);
       return res.status(500).json({ status: 'Błąd przy aktualizacji' });
