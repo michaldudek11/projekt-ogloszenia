@@ -82,6 +82,8 @@ app.get('/getAllPosts', async (req, res) => {
 });
 
 app.post('/addPost', jsonParser, async (req, res) => {
+  if (!req.body) res.status(400);
+
   const { title, description, image, price, category } = req.body;
 
   const postToAdd = new Advert({
@@ -92,7 +94,10 @@ app.post('/addPost', jsonParser, async (req, res) => {
     category,
   });
 
-  postToAdd.save();
+  postToAdd.save((err) => {
+    console.log(`Błąd w dodawaniu: ${err}`);
+    res.status(500);
+  });
 
   res.status(200);
 });
