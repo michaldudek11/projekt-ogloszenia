@@ -95,7 +95,7 @@ app.post('/addPost', jsonParser, async (req, res) => {
   });
 
   postToAdd.save((err) => {
-    console.log(`Błąd w dodawaniu: ${err}`);
+    console.log(`Błąd w dodawaniu: ${JSON.stringify(err)}`);
     res.status(500);
   });
 
@@ -114,7 +114,7 @@ app.put('/editPost', jsonParser, (req, res) => {
   Advert.updateOne({ _id: postID }, propsToUpdate, (updatedAdvert, err) => {
     if (err) {
       res.status(500);
-      console.log(`Błąd w aktualizowaniu: ${err}`);
+      console.log(`Błąd w aktualizowaniu: ${JSON.stringify(err)}`);
     }
     if (!updatedAdvert) res.status(404);
   });
