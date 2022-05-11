@@ -102,6 +102,25 @@ app.post('/addPost', jsonParser, async (req, res) => {
   res.status(200);
 });
 
+app.put('/editPost', jsonParser, (req, res) => {
+  const postID = req.body.postID;
+  if (!postID) res.status(400);
+
+  const filteredProps = Object.entries(req.body).filter((entry) => {
+    return entry[0] !== '_id'; // Nie aktualizujemy id
+  });
+
+  const propsToUpdate = Object.fromEntries(filteredProps);
+  Advert.updateOne({ _id: postID }, propsToUpdate, (updatedAdvert, err) => {
+    if (err) {
+      res.status(500);
+      console.log(`Błąd w aktualizowaniu: ${err}`);
+    }
+    if (!updatedAdvert) res.status(404);
+  });
+
+  res.status(200);
+});
 app.listen(port, () => {
   console.log('Serwer na porcie ' + port);
 });
