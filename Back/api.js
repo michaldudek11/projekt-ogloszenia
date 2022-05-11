@@ -82,7 +82,7 @@ app.get('/getAllPosts', async (req, res) => {
 });
 
 app.post('/addPost', jsonParser, async (req, res) => {
-  if (!req.body) res.status(400).json({ status: 'Nie podano parametrów' });
+  if (!req.body) return res.status(400).json({ status: 'Nie podano parametrów' });
 
   const { title, description, image, price, category } = req.body;
 
@@ -95,16 +95,18 @@ app.post('/addPost', jsonParser, async (req, res) => {
   });
 
   postToAdd.save((err) => {
-    console.log(`Błąd w dodawaniu: ${JSON.stringify(err)}`);
-    res.status(500).json({ status: 'Błąd przy dodawaniu posta' });
-  });
+    if (err) {
+      console.log(`Błąd w dodawaniu: ${JSON.stringify(err)}`);
+      return res.status(500).json({ status: 'Błąd przy dodawaniu posta' });
+    }
 
-  res.status(200).json({ status: 'ok' });
+    return res.status(200).json({ status: 'ok' });
+  });
 });
 
 app.put('/editPost', jsonParser, (req, res) => {
   const postID = req.body._id;
-  if (!postID) res.status(400).json({ status: 'Nie podano ID posta' });
+  if (!postID) return res.status(400).json({ status: 'Nie podano ID posta' });
 
   const filteredProps = Object.entries(req.body).filter((entry) => {
     return entry[0] !== '_id'; // Nie aktualizujemy id
@@ -112,15 +114,14 @@ app.put('/editPost', jsonParser, (req, res) => {
 
   const propsToUpdate = Object.fromEntries(filteredProps);
   Advert.updateOne({ _id: postID }, propsToUpdate, (updatedAdvert, err) => {
-    console.log('s');
     if (err) {
       console.log(`Błąd w aktualizowaniu: ${JSON.stringify(err)}`);
-      res.status(500).json({ status: 'Błąd przy aktualizacji' });
+      return res.status(500).json({ status: 'Błąd przy aktualizacji' });
     }
-    if (!updatedAdvert) res.status(404).json({ status: 'Nie zaktualizowano' });
-  });
+    if (!updatedAdvert) return res.status(404).json({ status: 'Nie zaktualizowano' });
 
-  res.status(200).json({ status: 'ok' });
+    res.status(200).json({ status: 'ok' });
+  });
 });
 app.listen(port, () => {
   console.log('Serwer na porcie ' + port);
