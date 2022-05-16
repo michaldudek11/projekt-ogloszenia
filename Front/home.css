@@ -37,5 +37,16 @@ nav ul {
 }
 
 .kartaOgloszenie {
-  /*  */
+  padding: 0.5rem;
+  background: white;
+}
+
+.oglTytul {
+  text-align: left;
+  font-weight: semibold;
+}
+
+.oglCena {
+  font-size: 0.9rem;
+  font-weight: normal;
 }
