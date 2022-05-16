@@ -14,14 +14,23 @@
     <nav>
       <ul>
         <li><a href="#" class="homeLink">Strona główna</a></li>
-        <li><button class="addBtn">Dodaj ogłoszenie</button></li>
+        <li><button class="addBtn" onClick="openModal()">Dodaj ogłoszenie</button></li>
       </ul>
     </nav>
     <h1>Projekt Ogłoszenia</h1>
     <div class="góra">
     <img src="" alt=""><p> </p> 
     
-    
+    <div class="modal">
+      <form action="" class="modalForm">
+        <input type="text" name="title" placeholder="Tytuł">
+        <input type="text" name="img" placeholder="Zdjęcie">
+        <input type="text" name="description" placeholder="Opis">
+        <input type="number" name="price" placeholder="Cena">
+        <input type="text" name="category" placeholder="Kategoria">
+        <input type="submit" value="Dodaj" onclick="handleAdd(event)">
+      </form>
+    </div>
   </div>
 
     </div>
