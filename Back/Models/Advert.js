@@ -9,6 +9,7 @@ const Advert = mongoose.model(
     image: String,
     price: Number,
     category: String,
+    authorEmail: String
   })
 );
 

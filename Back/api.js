@@ -84,7 +84,7 @@ app.get('/getAllPosts', async (req, res) => {
 app.post('/addPost', jsonParser, async (req, res) => {
   if (!req.body) return res.status(400).json({ status: 'Nie podano parametrów' });
 
-  const { title, description, image, price, category } = req.body;
+  const { title, description, image, price, category, authorEmail } = req.body;
 
   const postToAdd = new Advert({
     title,
@@ -92,6 +92,7 @@ app.post('/addPost', jsonParser, async (req, res) => {
     image,
     price,
     category,
+    authorEmail
   });
 
   postToAdd.save((err) => {
