@@ -7,11 +7,16 @@ const handleLogin = async (e) => {
 
   const response = await fetch('http://localhost:3000/login', {
     method: 'POST',
-    body: {
+    headers: {
+      "Content-type": "application/json"
+    },
+    body: JSON.stringify({
       email: email,
       password: password,
-    },
+    }),
   });
 
-  // response
+  if (response.ok) {
+    localStorage.setItem("email", email)
+  window.location.href = "http://localhost:5500/Front/index.html"}
 };
