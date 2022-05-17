@@ -9,13 +9,16 @@
     <link rel="stylesheet" href="home.css">
     <link rel="stylesheet" href="globals.css">
     <script src="posty.js" defer></script>
-    <script src="home.js"></script>
+    <script src="home.js" defer></script>
   </head>
   <body>
     <nav>
       <ul>
         <li><a href="#" class="homeLink">Strona główna</a></li>
-        <li><button class="addBtn" onClick="openModal()">Dodaj ogłoszenie</button></li>
+        <li class="rightNav">
+          <button class="addBtn" onClick="openModal()">Dodaj ogłoszenie</button>
+          <span class="userName">Witaj, </span>
+        </li>
       </ul>
     </nav>
     <h1>Projekt Ogłoszenia</h1>

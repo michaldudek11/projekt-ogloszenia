@@ -81,3 +81,9 @@ footer {
 .modal input {
   padding: 0.5rem 1rem;
 }
+
+.rightNav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
