@@ -41,12 +41,12 @@ nav ul {
   background: white;
 }
 
-.oglTytul {
+.advTytul {
   text-align: left;
   font-weight: semibold;
 }
 
-.oglCena {
+.advCena {
   font-size: 0.9rem;
   font-weight: normal;
 }
@@ -86,4 +86,8 @@ footer {
   display: flex;
   align-items: center;
   gap: 1rem;
+}
+
+.advvAutor {
+  text-decoration: none;
 }

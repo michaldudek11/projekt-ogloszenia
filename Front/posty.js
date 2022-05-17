@@ -11,9 +11,20 @@ const renderPosts = async () => {
   posts.reverse().forEach((postData) => {
     const post = `
         <article class="kartaOgloszenie">
-            ${postData.img && postData.img.includes("http") ? `<img src=${postData.img} >` : `<img src="placeholder.png">`}
-            <h3 class="oglTytul">${postData.title}</h3>
-            <h4 class="oglCena">${postData.price} zł</h4>
+            ${
+              postData.img && postData.img.includes('http')
+                ? `<img src=${postData.img} >`
+                : `<img src="placeholder.png">`
+            }
+            <div class="adverttBottom">
+            <span>
+              <h3 class="advTytul">${postData.title}</h3>
+              <h4 class="advCena">${postData.price} zł</h4>
+            </span>
+            </div>
+            <div>
+            <a href="mailto:"${postData.authorEmail}" class="advvAutor">Email: ${postData.authorEmail}</a>
+            </div>
         </article>`;
     grid.insertAdjacentHTML('afterbegin', post);
   });
@@ -23,11 +34,11 @@ renderPosts();
 
 const openModal = () => {
   const modal = document.querySelector('.modal');
-  modal.style.display = "flex";
-}
+  modal.style.display = 'flex';
+};
 
 const handleAdd = async (event) => {
-  event.preventDefault()
+  event.preventDefault();
   const addForm = document.querySelector('.modalForm');
 
   const title = addForm.elements['title'].value;
@@ -40,7 +51,7 @@ const handleAdd = async (event) => {
   const response = await fetch('http://localhost:3000/addPost', {
     method: 'POST',
     headers: {
-      "Content-type": "application/json"
+      'Content-type': 'application/json',
     },
     body: JSON.stringify({
       title: title,
@@ -48,15 +59,16 @@ const handleAdd = async (event) => {
       img: img,
       description: description,
       category: category,
-      authorEmail: authorEmail})
+      authorEmail: authorEmail,
+    }),
+  });
 
-  })
-  
   if (response.ok) {
-    document.querySelector(".modal").style.display = "none"
-    addForm.reset(); }
-}
+    document.querySelector('.modal').style.display = 'none';
+    addForm.reset();
+  }
+};
 
 const closeModal = () => {
-  document.querySelector('.modal').style.display = "none";
-}
+  document.querySelector('.modal').style.display = 'none';
+};
